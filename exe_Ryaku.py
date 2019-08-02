@@ -28,13 +28,13 @@ vec_title = conv_kana_to_vec(kana_title,1,"T")
 ryaku = loaded_model.predict(vec_title)
 for title in ryaku:
     for index,i in enumerate(title):
-        if i<=0.7:
+        if i<=0.475:
             title[index] = 0
         else:
-            title[index] = 2
+            title[index] = 1
 
 ryaku = ryaku.tolist()
-ryaku_kana = conv_vec_to_kana(ryaku,2)
+ryaku_kana = conv_vec_to_kana(ryaku,1)
 print("\n予測された略:")
 for x in ryaku_kana:
     print(" ".join(x))

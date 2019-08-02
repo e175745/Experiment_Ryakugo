@@ -30,9 +30,9 @@ https://github.com/e175745/Experiment_Ryakugo.git
 今回使用したデータセットについては、Webページに記載されている情報をウェブスクレイピングによって収集しcsvファイルに直したものを使用した。収集したデータの再配布はあまり良くないのでここでは公開しない。
 
 ## Development Environment
-macOS Mojave
-python 3.7.2
-sklearn 0.20.3
+macOS Mojave \n
+python 3.7.2 \n
+sklearn 0.20.3 \n
 janome 0.3.9
 
 ## Author

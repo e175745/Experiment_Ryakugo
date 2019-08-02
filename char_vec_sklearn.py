@@ -1,5 +1,5 @@
 # coding UTF-8
-from input import read_file, conv_str_to_kana, conv_kana_to_vec, conv_vec_to_kana, calc_accuracy
+from input import read_file, conv_str_to_kana, conv_kana_to_vec, conv_vec_to_kana, calc_accuracy, fix_data
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import mean_absolute_error
@@ -53,7 +53,6 @@ for j,title in enumerate(Y_pred):
 
 
 # csvに出力
-
 conbi = []
 for k,title in enumerate(Y_pred):
     ans = Y_test[k]
@@ -65,17 +64,19 @@ with open("conbi.csv", "w") as file:
     writer.writerows(Y_pred)
 
 # 0,1に変換
+#new_pred, result_T = fix_data(result,result_T)
+
 for title in result:
     for index,i in enumerate(title):
-        if i<=0.35:
+        if i<=0.475:
             title[index] = 0
         else:
             title[index] = 1
 
 # カナに直して比較
+
 # Y_pred = Y_pred.tolist()
 # Y_test = Y_test.tolist()
-
 Y_pred_kana = conv_vec_to_kana(result,1)
 Y_test_kana = conv_vec_to_kana(result_T,1)
 

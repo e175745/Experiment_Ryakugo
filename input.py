@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from janome.tokenizer import Tokenizer
-
+from sklearn.metrics.pairwise import cosine_similarity
 # 判定に使うカナリスト
 kana_lists = [\
     [u"ア", u"イ", u"ウ", u"エ", u"オ"],\
@@ -207,13 +207,47 @@ def conv_vec_to_char_type2(vec_char, weight):
     return char
 """
 
+def fix_data(title_list,ryaku_list):
+
+    title_s = title_list
+    ryaku_s = ryaku_list
+    fix_list = []
+
+    for i,title in enumerate(title_s):
+        title_charlist = []
+        ryaku_charlist = []
+
+        ryaku = ryaku_s[i]
+        while len(title) != 0 :
+            title_charlist.append(title[0:25])
+            del title[0:25]
+
+        while len(ryaku) != 0 :
+            ryaku_charlist.append(ryaku[0:25])
+            del ryaku[0:25]
+
+        fix_title = []
+        for title_char in title_charlist:
+            sim_list = []
+            list_a =[]
+            for ryaku_char in ryaku_charlist:
+                list_a.append(title_char)
+                #sim_list.append(cosine_similarity(title_char, ryaku_char))
+            sim_list = cosine_similarity(list_a, ryaku_charlist)
+            sim_list = sim_list[0]
+            sim_list = sim_list.tolist()
+            sim_index = sim_list.index(min(sim_list))
+            fix_title = fix_title + ryaku_charlist[sim_index]
+
+        fix_list.append(fix_title)
+    return fix_list, ryaku_list
+
 def calc_accuracy(list_ans, list_ryaku):
     num = 0
     acc = 0
 
     for i,ans in enumerate(list_ans):
         ryaku = list_ryaku[i]
-
         for j,char in enumerate(ans):
             num+=1
 
