@@ -23,6 +23,16 @@ input.pyにある関数を用いて学習を行う。
 引数には保存したモデルの名前を渡してやる。
 指示に従って予測してほしいタイトルを入力すると学習機によって予測された略称が出てくる。
 
+### Linear_Regression.sav 
+char_vec_sklearn.pyにて作成される学習機モデルを保存してあるsav形式のファイル。
+pickleのdumpコマンドによって保存されており、exe_Ryaku.pyを起動する際に必要。
+
+### ieExperiment2_presentation.pdf
+実験の発表の際に使用したパワーポイント資料。
+
+
+
+
 ## Git URL
 https://github.com/e175745/Experiment_Ryakugo.git
 
