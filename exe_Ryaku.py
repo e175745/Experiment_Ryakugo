@@ -5,8 +5,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from input import read_file, conv_str_to_kana, conv_kana_to_vec, conv_vec_to_kana
 
-
-# モデルのロード
+# 実行時の引数を渡してモデルをロード
 try:
     args = sys.argv
     filename = args[1]
@@ -26,6 +25,8 @@ title_list.append(title)
 kana_title = conv_str_to_kana(title_list)
 vec_title = conv_kana_to_vec(kana_title,1,"T")
 ryaku = loaded_model.predict(vec_title)
+
+# 予測した結果を文字に直して出力
 for title in ryaku:
     for index,i in enumerate(title):
         if i<=0.475:
@@ -35,6 +36,7 @@ for title in ryaku:
 
 ryaku = ryaku.tolist()
 ryaku_kana = conv_vec_to_kana(ryaku,1)
+
 print("\n予測された略:")
 for x in ryaku_kana:
     print(" ".join(x))
