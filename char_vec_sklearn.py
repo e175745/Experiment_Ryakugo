@@ -8,7 +8,7 @@ import pickle
 
 # ファイルから読み込み配列に代入
 data = read_file('dataset_for.csv')
-#タ イトル群をカタカナに変換し,さらに母音子音情報に変換
+# タイトル群をカタカナに変換し,さらに母音子音情報に変換
 kana_title = conv_str_to_kana(data[0])
 kana_ans = conv_str_to_kana(data[1])
 vec_title = conv_kana_to_vec(kana_title,1,"T")
