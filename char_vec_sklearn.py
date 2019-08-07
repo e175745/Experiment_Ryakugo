@@ -2,22 +2,19 @@
 from input import read_file, conv_str_to_kana, conv_kana_to_vec, conv_vec_to_kana, calc_accuracy, fix_data
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import LeaveOneOut
-from sklearn.metrics import mean_absolute_error
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import csv
 import pickle
 
+# ファイルから読み込み配列に代入
 data = read_file('dataset_for.csv')
-#data = read_file('abbrs_title.csv')
+# タイトル群をカタカナに変換し,さらに母音子音情報に変換
 kana_title = conv_str_to_kana(data[0])
 kana_ans = conv_str_to_kana(data[1])
-#vec_title = conv_kana_to_vec(kana_title,1,"T")
-#vec_ans = conv_kana_to_vec(kana_ans,2,"R")
 vec_title = conv_kana_to_vec(kana_title,1,"T")
 vec_ans = conv_kana_to_vec(kana_ans,1,"R")
 
+# 交差検証を実行
 loo = LeaveOneOut()
 lr = LinearRegression()
 vec_ans = np.array(vec_ans)
@@ -64,8 +61,6 @@ with open("conbi.csv", "w") as file:
     writer.writerows(Y_pred)
 
 # 0,1に変換
-#new_pred, result_T = fix_data(result,result_T)
-
 for title in result:
     for index,i in enumerate(title):
         if i<=0.475:
@@ -73,10 +68,7 @@ for title in result:
         else:
             title[index] = 1
 
-# カナに直して比較
-
-# Y_pred = Y_pred.tolist()
-# Y_test = Y_test.tolist()
+# カナに直してタイトルごとに比較
 Y_pred_kana = conv_vec_to_kana(result,1)
 Y_test_kana = conv_vec_to_kana(result_T,1)
 
