@@ -5,26 +5,31 @@ from janome.tokenizer import Tokenizer
 from sklearn.metrics.pairwise import cosine_similarity
 # 判定に使うカナリスト
 kana_lists = [\
-    [u"ア", u"イ", u"ウ", u"エ", u"オ"],\
-    [u"ァ", u"ィ", u"ゥ", u"ェ", u"ォ"],\
-    [u"カ", u"キ", u"ク", u"ケ", u"コ"],\
-    [u"ガ", u"ギ", u"グ", u"ゲ", u"ゴ"],\
-    [u"サ", u"シ", u"ス", u"セ", u"ソ"],\
-    [u"ザ", u"ジ", u"ズ", u"ゼ", u"ゾ"],\
-    [u"タ", u"チ", u"ツ", u"テ", u"ト"],\
-    [u"ダ", u"ヂ", u"ヅ", u"デ", u"ド"],\
-    [u"ナ", u"ニ", u"ヌ", u"ネ", u"ノ"],\
-    [u"ハ", u"ヒ", u"フ", u"ヘ", u"ホ"],\
-    [u"バ", u"ビ", u"ブ", u"ベ", u"ボ"],\
-    [u"パ", u"ピ", u"プ", u"ペ", u"ポ"],\
-    [u"マ", u"ミ", u"ム", u"メ", u"モ"],\
-    [u"ヤ", u"", u"ユ", u"", u"ヨ"],\
-    [u"ャ", u"", u"ュ", u"", u"ョ"],\
-    [u"ラ", u"リ", u"ル", u"レ", u"ロ"],\
-    [u"ワ", u"ヰ", u"", u"ヱ", u"ヲ"]]
+              [u"ア", u"イ", u"ウ", u"エ", u"オ"],\
+              [u"ァ", u"ィ", u"ゥ", u"ェ", u"ォ"],\
+              [u"カ", u"キ", u"ク", u"ケ", u"コ"],\
+              [u"ガ", u"ギ", u"グ", u"ゲ", u"ゴ"],\
+              [u"サ", u"シ", u"ス", u"セ", u"ソ"],\
+              [u"ザ", u"ジ", u"ズ", u"ゼ", u"ゾ"],\
+              [u"タ", u"チ", u"ツ", u"テ", u"ト"],\
+              [u"ダ", u"ヂ", u"ヅ", u"デ", u"ド"],\
+              [u"ナ", u"ニ", u"ヌ", u"ネ", u"ノ"],\
+              [u"ハ", u"ヒ", u"フ", u"ヘ", u"ホ"],\
+              [u"バ", u"ビ", u"ブ", u"ベ", u"ボ"],\
+              [u"パ", u"ピ", u"プ", u"ペ", u"ポ"],\
+              [u"マ", u"ミ", u"ム", u"メ", u"モ"],\
+              [u"ヤ", u"", u"ユ", u"", u"ヨ"],\
+              [u"ャ", u"", u"ュ", u"", u"ョ"],\
+              [u"ラ", u"リ", u"ル", u"レ", u"ロ"],\
+              [u"ワ", u"ヰ", u"", u"ヱ", u"ヲ"]]
 
-# カタカナをベクトルに変換
+
 def conv_kana_to_vec(str_list,weight, TorR):
+    """
+    カタカナをベクトルに変換
+    母音は５種類、子音20種類
+    ん、ー、っ、ゔは「kana_lists」にないので先に決定しておく
+    """
     output_vec = []
     # for文で一文字づつ判定
     for title in str_list:
@@ -42,11 +47,12 @@ def conv_kana_to_vec(str_list,weight, TorR):
                 consonant_list[10] = weight
                 vowel_list[2] = weight
             else:
-                for i, kana_list in enumerate(kana_lists):
-                    if char in kana_list:
-                        index = kana_list.index(char)
-                        consonant_list[i] = weight
-                        vowel_list[index] = weight
+                #母音と子音の重きを決めていく
+                for i, kana_list in enumerate(kana_lists):#「kana_list」に「kana_lists」の配列を代入。その配列の番目が「i」。つまり「kana_list」≒「kana_lists」
+                    if char in kana_list:#上の「char」が「kana_list」の何番目にあるかを確かめる
+                        index = kana_list.index(char)#「char」の「kana_lists」の何番目という情報を「index」に代入
+                        consonant_list[i] = weight#i番目、つまり子音要素に重き
+                        vowel_list[index] = weight#index番目、つまり母音要素に重き
                         break
 
             title_vec = title_vec + vowel_list + consonant_list
@@ -65,6 +71,7 @@ def conv_kana_to_vec(str_list,weight, TorR):
                 #タイトル群に追加
             output_vec.append(title_vec)
     return output_vec
+
 
 """
 def conv_kana_to_vec_type2(str_list, TorR):
@@ -91,37 +98,36 @@ def conv_kana_to_vec_type2(str_list, TorR):
                         consonant_index = i+1
                         vowel_index = index+1
                         break
-
             title_vec.append(vowel_index)
             title_vec.append(consonant_index)
-
         if TorR=="T":
             while len(title_vec) <= 35*2+1:
                 title_vec.append(0)
                 #タイトル群に追加
             output_vec.append(title_vec)
-
         elif TorR=="R":
             while len(title_vec) <= 5*2+1:
                 title_vec.append(0)
                 #タイトル群に追加
             output_vec.append(title_vec)
-
     return output_vec
 """
 
-def read_file(file):
 
-    # csvファイルを読み込み
-    # 教師とデータそれぞれを別の配列に入れる
+def read_file(file):
+    """
+    csvファイルを読み込み
+    教師とデータそれぞれを別の配列に入れる
+    """
     data = pd.read_csv(file)
     str_list = list(data['Title_kana'])
     answer_list = list(data['Ryaku_kana'])
     return str_list, answer_list
 
 def conv_str_to_kana(str_list):
-
-    #ファイルから読み込んだものをJanomeを使ってカタカナに変換
+    """
+    ファイルから読み込んだものをJanomeを使ってカタカナに変換する
+    """
     t = Tokenizer()
     kana_list = []
     for i in str_list:
@@ -135,19 +141,6 @@ def conv_str_to_kana(str_list):
 
     return kana_list
 
-def conv_vec_to_kana(vec_list,weight):
-    kana_list = []
-    for vec_title in vec_list:
-        title = []
-        while len(vec_title) != 0 :
-            vec_char = vec_title[0:25]
-            del vec_title[0:25]
-            char = conv_vec_to_char(vec_char,weight)
-            if char != "":
-                title.append(char)
-        kana_list.append(title)
-
-    return kana_list
 
 """
 def conv_vec_to_kana_type2(vec_list,weight):
@@ -161,11 +154,31 @@ def conv_vec_to_kana_type2(vec_list,weight):
             if char != "":
                 title.append(char)
         kana_list.append(title)
-
     return kana_list
 """
 
+
+def conv_vec_to_kana(vec_list,weight):
+    """
+    ベクトルをカタカナに変換する
+    """
+    kana_list = []
+    for vec_title in vec_list:
+        title = []
+        while len(vec_title) != 0 :
+            vec_char = vec_title[0:25]
+            del vec_title[0:25]
+            char = conv_vec_to_char(vec_char,weight)
+            if char != "":
+                title.append(char)
+        kana_list.append(title)
+
+    return kana_list
+
 def conv_vec_to_char(vec_char, weight):
+    """
+    ベクトルをcharに変換
+    """
     kana_lists_array = np.array(kana_lists)
     vowel_vec = vec_char[0:5]
 
@@ -189,6 +202,7 @@ def conv_vec_to_char(vec_char, weight):
 
     return char
 
+
 """
 def conv_vec_to_char_type2(vec_char, weight):
     kana_lists_array = np.array(kana_lists)
@@ -202,12 +216,15 @@ def conv_vec_to_char_type2(vec_char, weight):
     elif consonant_index == 20 :
         char = u"ッ"
     else :
-
         char = kana_lists_array[consonant_index-1,vowel_index-1]
     return char
 """
 
+
 def fix_data(title_list,ryaku_list):
+    """
+    予測した文字が元タイトルになかった場合、タイトルにある文字に変更する
+    """
 
     title_s = title_list
     ryaku_s = ryaku_list
@@ -243,6 +260,9 @@ def fix_data(title_list,ryaku_list):
     return fix_list, ryaku_list
 
 def calc_accuracy(list_ans, list_ryaku):
+    """
+    1文字ごとの正答率を出す
+    """
     num = 0
     acc = 0
 
@@ -275,7 +295,7 @@ for y in kana_title:
 for i,kana_title in enumerate(kana_title):
     print(kana_title)
     print(vec_title[i])
-
+    
 s = "やはり俺の青春ラブコメは間違っている"
 t = Tokenizer()
 for token in t.tokenize(s):
