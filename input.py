@@ -26,12 +26,23 @@ kana_lists = [\
 
 def conv_kana_to_vec(str_list,weight, TorR):
     """
-    str_list＝タイトルのリスト
-    weight＝重さ
-    TorR＝タイトルor略語
-    カタカナをベクトルに変換
-    母音は５種類、子音20種類
-    ん、ー、っ、ゔは「kana_lists」にないので先に決定しておく
+        カタカナをベクトルに変換
+        母音は５種類、子音20種類
+        ん、ー、っ、ゔは「kana_lists」にないので先に決定しておく
+        str_list＝タイトルのリスト
+        weight＝重さ
+        TorR＝タイトルor略語
+    
+    Args:
+        str_list str:
+        
+        weight int:
+        
+        TorR str:
+        
+    Returns:
+        [int]:
+        ベクトルの配列を出力
     """
     output_vec = []
     # for文で一文字づつ判定
@@ -77,9 +88,18 @@ def conv_kana_to_vec(str_list,weight, TorR):
 
 def read_file(file):
     """
-    file＝csvファイル
-    csvファイルを読み込み
-    教師とデータそれぞれを別の配列に入れる
+        csvファイルを読み込み
+        教師とデータそれぞれを別の配列に入れる
+        file＝csvファイル
+
+    Args:
+        file str:
+        
+    Returns:
+      [str]:
+            str_list＝タイトル
+            answer_list＝略語
+    
     """
     data = pd.read_csv(file)
     str_list = list(data['Title_kana'])
@@ -88,8 +108,15 @@ def read_file(file):
 
 def conv_str_to_kana(str_list):
     """
-    str_list＝タイトル
-    ファイルから読み込んだものをJanomeを使ってカタカナに変換する
+        str_list＝タイトル
+        ファイルから読み込んだものをJanomeを使ってカタカナに変換する
+    Args:
+        str_list str:
+    
+    Returns:
+      [str]:
+            kana_list＝カタカナ
+            
     """
     t = Tokenizer()
     kana_list = []
@@ -107,9 +134,19 @@ def conv_str_to_kana(str_list):
 
 def conv_vec_to_kana(vec_list,weight):
     """
-    vec_list＝ベクトル
-    weight＝重さ
-    ベクトルをカナに変換する
+        vec_list＝ベクトル
+        weight＝重さ
+        ベクトルをカナに変換する
+    
+    Args:
+        vec_list int:
+        
+        weight int:
+    
+    Returns:
+      [str]:
+            kana_list＝カタカナ
+    
     """
     kana_list = []
     for vec_title in vec_list:
@@ -126,9 +163,19 @@ def conv_vec_to_kana(vec_list,weight):
 
 def conv_vec_to_char(vec_char, weight):
     """
-    vec_char＝ベクトル
-    weight＝重さ
-    ベクトルをcharに変換
+        vec_char＝ベクトル
+        weight＝重さ
+        ベクトルをcharに変換
+    
+    Args:
+        vec_char int:
+    
+        weight int:
+    
+    Returns:
+        str:
+            char=1文字
+    
     """
     kana_lists_array = np.array(kana_lists)
     vowel_vec = vec_char[0:5]
@@ -156,9 +203,19 @@ except ValueError:
 
 def fix_data(title_list,ryaku_list):
     """
-    title_list＝タイトルのリスト
-    ryaku_list＝略語のリスト
-    予測した文字が元タイトルになかった場合、タイトルにある文字に変更する
+        title_list＝タイトルのリスト
+        ryaku_list＝略語のリスト
+        予測した文字が元タイトルになかった場合、タイトルにある文字に変更する
+    
+    Args:
+        title_list str:
+    
+        ryaku_list str:
+    
+    Returns:
+      [str]:
+            fix_list=修正後のタイトル
+            ryaku_list＝略タイトル
     """
     
     title_s = title_list
@@ -196,9 +253,18 @@ def fix_data(title_list,ryaku_list):
 
 def calc_accuracy(list_ans, list_ryaku):
     """
-    list_ans＝タイトルのリスト
-    list_ryaku＝略語のリスト
-    1文字ごとの正答率を出す
+        list_ans＝タイトルのリスト
+        list_ryaku＝略語のリスト
+        1文字ごとの正答率を出す
+    
+    Args:
+        list_ans str:
+    
+        list_ryaku str:
+    
+    Returns:
+      float:
+            acc＝正答率
     """
     num = 0
     acc = 0
